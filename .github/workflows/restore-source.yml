@@ -31,14 +31,14 @@ jobs:
           set -euo pipefail
           test -f prooftrail-source.READY
           compgen -G 'prooftrail-source.part-*' >/dev/null
-          cat prooftrail-source.part-* | base64 --decode > /tmp/prooftrail-source.tar.gz
-          gzip -t /tmp/prooftrail-source.tar.gz
-          tar -tzf /tmp/prooftrail-source.tar.gz > /tmp/prooftrail-files.txt
-          if grep -E '(^/|(^|/)\.\.( /|$)|^\.\./)' /tmp/prooftrail-files.txt; then
+          cat prooftrail-source.part-* | base64 --decode > /tmp/prooftrail-source.tar.xz
+          xz -t /tmp/prooftrail-source.tar.xz
+          tar -tJf /tmp/prooftrail-source.tar.xz > /tmp/prooftrail-files.txt
+          if grep -E '(^/|(^|/)\.\.(/|$))' /tmp/prooftrail-files.txt; then
             echo "Archive has a suspicious path" >&2
             exit 1
           fi
-          tar --no-same-owner --no-same-permissions -xzf /tmp/prooftrail-source.tar.gz -C .
+          tar --no-same-owner --no-same-permissions -xJf /tmp/prooftrail-source.tar.xz -C .
           test -f package.json
           test -f src/app/page.tsx
           test -f db/migrations/0001_initial_schema.sql
