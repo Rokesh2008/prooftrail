@@ -3,7 +3,17 @@ name: CI
 on:
   push:
     branches: [main, develop]
+    # The bootstrap archive is expanded and tested by restore-source.yml.
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'docker-compose.yml'
   pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'docker-compose.yml'
+      - '.github/workflows/ci.yml'
 
 permissions:
   contents: read
